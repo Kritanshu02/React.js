@@ -1,0 +1,97 @@
+import React, { useState } from 'react';
+
+function SearchByBirthdate({ users }) {
+  const [day, setDay] = useState('');
+  const [month, setMonth] = useState('');
+  const [filteredResults, setFilteredResults] = useState([]);
+
+  const days = [];
+  for (let i = 1; i <= 31; i++) {
+    days.push(i);
+  }
+
+  const months = [];
+  for (let i = 1; i <= 12; i++) {
+    months.push(i);
+  }
+
+  function handleFilter() {
+    if (!day || !month) return;
+
+    const filtered = users.filter((user) => {
+      if (!user.birthdate) return false;
+      const date = new Date(user.birthdate);
+      return date.getDate() === +day && date.getMonth() + 1 === +month;
+    });
+
+    // setFilteredUsers(filtered);
+    setFilteredResults(filtered);
+  }
+      console.log(users);
+
+
+  return (
+    <div className="p-8 bg-white shadow-md rounded-md w-full max-w-2xl mx-auto mt-10">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Search By Birthday</h1>
+
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Day:</label>
+          <select
+            value={day}
+            onChange={(e) => setDay(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Select Day</option>
+            {days.map((d) => (
+              <option key={d} value={d}>
+                {d}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Month:</label>
+          <select
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Select Month</option>
+            {months.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <button
+        onClick={handleFilter}
+        className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
+      >
+        Filter
+      </button>
+
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">Filtered Users:</h2>
+        {filteredResults.length > 0 ? (
+          <ul className="list-disc list-inside space-y-2">
+            {filteredResults.map((user, index) => (
+              <li key={index} className="text-gray-700">
+                <span className="font-medium">{user.first_name} {user.last_name}</span> — {user.birthdate}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-500 italic">No users found.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default SearchByBirthdate;
+
