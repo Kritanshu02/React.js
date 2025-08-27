@@ -52,7 +52,7 @@ const App = () => {
           count: users.filter((user) => !user.subscribed).length,
         },
         {
-          label:"last_login",
+          label:"Last-Login",
           count:users.filter((user)=>user.last_login=="Daily").length
         }
       ]);
@@ -114,7 +114,7 @@ const App = () => {
                 {loading ? (
                   <p className="text-lg text-gray-700">Loading...</p>
                 ) : (
-                  <div className="grid grid-cols-3 gap-6 ">
+                  <div className="grid grid-cols-3 gap-x-20 ">
                     {usersData?.map((ele, idx) => (
                       <Box key={idx} heading={ele.label} data={ele.count} />
                     ))}

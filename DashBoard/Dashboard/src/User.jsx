@@ -85,7 +85,7 @@ function Users({ allUsers, departments }) {
       <div className="mb-4 ">
         <button
           onClick={() => handleSortChange("asc")}
-          className="bg-blue-500 text-white py-2 ml-120 px-4 rounded mr-2 hover:bg-blue-600 cursor-pointer"
+          className="bg-blue-500  text-white py-2 ml-150 px-4 rounded mr-2 hover:bg-blue-600 cursor-pointer"
         >
           Sort by Name (Asc)
         </button>
@@ -122,9 +122,7 @@ function Users({ allUsers, departments }) {
                 <td className="p-3">{user.id}</td>
                 <td className="p-3">{user.first_name}</td>
                 <td className="p-3">{user.last_name}</td>
-                <td className="p-3">
-                  {user.email}
-                </td>
+                <td className="p-3">{user.email}</td>
                 <td className="p-3">{user.gender}</td>
                 <td className="p-3">{user.department}</td>
               </tr>

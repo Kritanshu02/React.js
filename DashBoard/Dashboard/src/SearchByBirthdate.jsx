@@ -20,14 +20,19 @@ function SearchByBirthdate({ users }) {
 
     const filtered = users.filter((user) => {
       if (!user.birthdate) return false;
-      const date = new Date(user.birthdate);
-      return date.getDate() === +day && date.getMonth() + 1 === +month;
+      // const date = new Date(user.birthdate);
+      // return date.getDate() === parseInt(day) && date.getMonth() + 1 === parseInt(month);
+      const uDOB = user.birthdate.split('/')
+      const uDate = uDOB[0]
+      const uMonth = uDOB[1]
+      return +uDate=== parseInt(day) && +uMonth === parseInt(month)
+
     });
 
     // setFilteredUsers(filtered);
     setFilteredResults(filtered);
   }
-      console.log(users);
+      console.log(filteredResults);
 
 
   return (
@@ -36,12 +41,13 @@ function SearchByBirthdate({ users }) {
 
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Day:</label>
+          <label className="block text-l font-medium text-gray-700 mb-1">Day:
           <select
             value={day}
             onChange={(e) => setDay(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            className=" ml-4 px-3 py-3 border border-gray-300  shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           >
+            
             <option value="">Select Day</option>
             {days.map((d) => (
               <option key={d} value={d}>
@@ -49,14 +55,15 @@ function SearchByBirthdate({ users }) {
               </option>
             ))}
           </select>
+          </label>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Month:</label>
+          <label className="lock text-l font-medium text-gray-700 mb-1">Month:
           <select
             value={month}
             onChange={(e) => setMonth(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            className=" ml-4 px-3 py-3 border border-gray-300 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">Select Month</option>
             {months.map((m) => (
@@ -65,18 +72,20 @@ function SearchByBirthdate({ users }) {
               </option>
             ))}
           </select>
-        </div>
-      </div>
-
-      <button
+          </label>
+          <button
         onClick={handleFilter}
-        className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
+        className="ml-8 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
       >
         Filter
       </button>
+        </div>
+      </div>
+
+      
 
       <div className="mt-8">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Filtered Users:</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Filtered Users:</h2>
         {filteredResults.length > 0 ? (
           <ul className="list-disc list-inside space-y-2">
             {filteredResults.map((user, index) => (
