@@ -34,7 +34,9 @@ function Users({ allUsers, departments }) {
   };
 
   const handleEditClick = (user) => {
+    console.log(user)
     setEditUser({ ...user });
+    
     setIsEditModalOpen(true);
   };
 
@@ -56,6 +58,7 @@ function Users({ allUsers, departments }) {
   };
   const handleDelete=(id)=>{
     const updatedUsers=allUsers.filter((user)=>user.id !== id);
+    console.log("first",updatedUsers.length)
     allUsers.length = 0;
     allUsers.push(...updatedUsers);
   }
@@ -109,24 +112,18 @@ function Users({ allUsers, departments }) {
         ))}
       </select>
 
-      {/* Sort Buttons */}
-      <div className="mb-4 ">
-        <button
-          onClick={() => handleSortChange("asc")}
-          className="bg-blue-500  text-white py-2 ml-150 px-4 rounded mr-2 hover:bg-blue-600 cursor-pointer"
-        >
-          Sort by Name (Asc)
-        </button>
-        <button
-          onClick={() => handleSortChange("desc")}
-          className="bg-blue-500 text-white py-2 px-4 rounded mr-2 hover:bg-blue-600 cursor-pointer"
-        >
-          Sort by Name (Desc)
-        </button>
-      </div>
 
+       {/* Sort Dropdown */}
+  <select
+    onChange={(e) => handleSortChange(e.target.value)}
+    className="mb-4 ml-2 p-3  border border-gray-900 rounded-lg  focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">Filter By Names</option>
+    <option value="asc">A to Z</option>
+    <option value="desc">Z to A</option>
+  </select>
       {/* Table */}
-      <div className="bg-white shadow-lg h-[330px] overflow-auto">
+      <div className="bg-white shadow-lg h-[330px] overflow-auto mt-10">
         <table className="w-full text-center table-fixed border-collapse">
           <thead className="bg-gray-100 text-gray-700 sticky top-0 z-10">
             <tr className="border-b">
@@ -147,29 +144,39 @@ function Users({ allUsers, departments }) {
                 className="border-b hover:bg-gray-100 cursor-pointer"
               >
                 <td className="p-3">{user.id}</td>
+                {/* <td className="p-3" >
+                    <img src={user.avatar} 
+                     alt="User image is not available" 
+                     className="w-8 h-8 rounded-full"></img> </td> */}
                 <td className="p-3">{user.first_name}</td>
                 <td className="p-3">{user.last_name}</td>
                 <td className="p-3">{user.email}</td>
                 <td className="p-3">{user.gender}</td>
                 <td className="p-3">{user.department}</td>
+        {/* edit/del */}
                 <button
                   onClick={() => handleEditClick(user)}
-                  className="mt-2.5 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                  className="cursor-pointer mt-2.5 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
                 >
                   Edit
                 </button>
                 <button
                 onClick={()=> handleDelete(user.id)}
-                className="bg-red-500 ml-1 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                // onClick={()=>console.log("first")}
+                className="cursor-pointer bg-red-500 ml-1 text-white px-3 py-1 rounded hover:bg-red-600">
+                  Delete</button>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      {/* Modal
-      {isModalOpen && selectedUser && (
+      {/* Modal */}
+      {/* {isModalOpen && selectedUser && (
         <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm">
-          <div className="h-[400px] overflow-auto bg-white p-3 rounded-lg shadow-lg w-[90%] max-w-md relative">
+
+          <div className="h-[400px] overflow-auto bg-white p-3 rounded-lg shadow-lg w-[90%] max-w-md relative"
+          >
+
             <button
               onClick={closeModal}
               className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-2xl"
@@ -246,12 +253,12 @@ function Users({ allUsers, departments }) {
             </h2>
             <div className="flex flex-col gap-4 h-[300px] overflow-auto">
               <div>
-                <label className="block text-gray-700 text-sm ml-1 mb-1">First Name</label>
+                <label className="block text-gray-700 text-sm mb-1">First Name</label>
                 <input
                   name="first_name"
                   value={editUser.first_name}
                   onChange={handleEditChange}
-                  className="border border-gray-300 p-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-300 p-3 w-110  outline-none"
                   placeholder="Enter first name"
                 />
               </div>
@@ -261,7 +268,7 @@ function Users({ allUsers, departments }) {
                   name="last_name"
                   value={editUser.last_name}
                   onChange={handleEditChange}
-                  className="border border-gray-300 p-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-300 p-3 w-110  outline-none"
                   placeholder="Enter last name"
                 />
               </div>
@@ -272,7 +279,7 @@ function Users({ allUsers, departments }) {
                   type="email"
                   value={editUser.email}
                   onChange={handleEditChange}
-                  className="border border-gray-300 p-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-300 p-3 w-110  outline-none"
                   placeholder="Enter email"
                 />
               </div>
@@ -282,7 +289,7 @@ function Users({ allUsers, departments }) {
                   name="gender"
                   value={editUser.gender}
                   onChange={handleEditChange}
-                  className="border border-gray-300 p-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-300 p-3 w-110  outline-none"
                   placeholder="Enter gender"
                 />
               </div>
@@ -292,7 +299,7 @@ function Users({ allUsers, departments }) {
                   name="department"
                   value={editUser.department}
                   onChange={handleEditChange}
-                  className="border border-gray-300 p-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="border border-gray-300 p-3 w-110  outline-none"
                   placeholder="Enter department"
                 />
               </div>
@@ -300,12 +307,12 @@ function Users({ allUsers, departments }) {
             {/* action button */}
             <div className="flex justify-end gap-3 mt-6">
               <button onClick={() => setIsEditModalOpen(false)} 
-              className="px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 ">
+              className="px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 cursor-pointer">
                 Cancel
               </button>
 
               <button onClick={handleSaveEdit} 
-              className="px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 cursor-pointer">
                 Save Changes
               </button>
             </div>
