@@ -4,11 +4,12 @@ function Users({ allUsers, departments }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
- 
-  const[selectedUser, setSelectedUser]=useState(null)
-  const[isModalOpen, setIsModalOpen]=useState(false)
 
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [editUser, setEditUser] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -22,7 +23,7 @@ function Users({ allUsers, departments }) {
     setSortOrder(order);
   };
 
-    const handleRowClick = (user) => {
+  const handleRowClick = (user) => {
     setSelectedUser(user);
     setIsModalOpen(true);
   };
@@ -31,6 +32,33 @@ function Users({ allUsers, departments }) {
     setSelectedUser(null);
     setIsModalOpen(false);
   };
+
+  const handleEditClick = (user) => {
+    setEditUser({ ...user });
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setEditUser((prev) => {
+      return { ...prev, [name]: value };
+    });
+  };
+
+  const handleSaveEdit = () => {
+    const updatedUsers=allUsers.map((user)=>
+    user.id=== editUser.id? editUser : user);
+    allUsers.length = 0;
+    allUsers.push(...updatedUsers);
+    setIsEditModalOpen(false);
+  };
+  const handleDelete=(id)=>{
+    const updatedUsers=allUsers.filter((user)=>user.id !== id);
+    allUsers.length = 0;
+    allUsers.push(...updatedUsers);
+  }
 
   const filteredUsers = allUsers
     .filter((user) => {
@@ -97,10 +125,8 @@ function Users({ allUsers, departments }) {
         </button>
       </div>
 
-
-
-     {/* Table */}
-      <div className="bg-white shadow-lg h-[340px] overflow-auto">
+      {/* Table */}
+      <div className="bg-white shadow-lg h-[330px] overflow-auto">
         <table className="w-full text-center table-fixed border-collapse">
           <thead className="bg-gray-100 text-gray-700 sticky top-0 z-10">
             <tr className="border-b">
@@ -110,6 +136,7 @@ function Users({ allUsers, departments }) {
               <th className="p-3 w-[250px]">Email</th>
               <th className="p-3 w-[100px]">Gender</th>
               <th className="p-3 w-[150px]">Department</th>
+              <th className="p-3 w-[150px]">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -125,15 +152,24 @@ function Users({ allUsers, departments }) {
                 <td className="p-3">{user.email}</td>
                 <td className="p-3">{user.gender}</td>
                 <td className="p-3">{user.department}</td>
+                <button
+                  onClick={() => handleEditClick(user)}
+                  className="mt-2.5 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                >
+                  Edit
+                </button>
+                <button
+                onClick={()=> handleDelete(user.id)}
+                className="bg-red-500 ml-1 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      {/* Modal */}
+      {/* Modal
       {isModalOpen && selectedUser && (
         <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm">
-          <div className="bg-white p-3 rounded-lg shadow-lg w-[90%] max-w-md relative">
+          <div className="h-[400px] overflow-auto bg-white p-3 rounded-lg shadow-lg w-[90%] max-w-md relative">
             <button
               onClick={closeModal}
               className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-2xl"
@@ -141,20 +177,147 @@ function Users({ allUsers, departments }) {
             &times;
             </button>
             <h2 className="text-2xl font-semibold mb-4">User Details</h2>
-            <ul className="space-y-2">
-              <li><strong>ID:</strong> {selectedUser.id}</li>
-              <li><strong>First Name:</strong> {selectedUser.first_name}</li>
-              <li><strong>Last Name:</strong> {selectedUser.last_name}</li>
-              <li><strong>Email:</strong> {selectedUser.email}</li>
-              <li><strong>Gender:</strong> {selectedUser.gender}</li>
-              <li><strong>Department:</strong> {selectedUser.department}</li>
-            </ul>
+            <table className="min-w-full table-auto ">
+              <tbody>
+                <tr>
+                  <td className="px-4 py-2 border-b font-semibold"></td>
+                  <td className="px-4 py-2 border-b" >
+                    <img src={selectedUser.avatar} 
+                     alt="User image is not available" 
+                     className="w-26 h-26 rounded-full"></img> </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 border-b font-semibold">ID</td>
+                  <td className="px-4 py-2 border-b" >{selectedUser.id}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 border-b font-semibold">First Name</td>
+                  <td className="px-4 py-2 border-b" >{selectedUser.first_name}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 border-b font-semibold">Last Name</td>
+                  <td className="px-4 py-2 border-b" >{selectedUser.last_name}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 border-b font-semibold">Contact</td>
+                  <td className="px-4 py-2 border-b" >{selectedUser.phone}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 border-b font-semibold">Email</td>
+                  <td className="px-4 py-2 border-b" >{selectedUser.email}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 border-b font-semibold">Gender</td>
+                  <td className="px-4 py-2 border-b" >{selectedUser.gender}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 border-b font-semibold">BirthDate</td>
+                  <td className="px-4 py-2 border-b" >{selectedUser.birthdate}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 border-b font-semibold">Department</td>
+                  <td className="px-4 py-2 border-b" >{selectedUser.department}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 border-b font-semibold">Company</td>
+                  <td className="px-4 py-2 border-b" >{selectedUser.company_name}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 border-b font-semibold">Job-Tittle</td>
+                  <td className="px-4 py-2 border-b" >{selectedUser.job_title}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 border-b font-semibold">Address</td>
+                  <td className="px-4 py-2 border-b" >{selectedUser.address[0].street}</td>
+                </tr>
+            </tbody>
+            </table>
+          </div>
+        </div>
+      )} */}
+      {/* Edit Modal */}
+      {isEditModalOpen && editUser && (
+        <div className="main fixed inset-0 flex items-center justify-center backdrop-blur-sm z-50">
+          <div className="sub main bg-white p-6 rounded-2xl shadow-xl w-[95%] max-w-lg">
+            {/* <button onClick={() => setIsEditModalOpen(false)} className="  right-100 text-gray-600 hover:text-gray-900 text-3xl">
+              &times;</button> */}
+            <h2 className="text-2xl font-semibold mb-6 text-gray-800 border-b pb-2">
+              Edit User Details
+            </h2>
+            <div className="flex flex-col gap-4 h-[300px] overflow-auto">
+              <div>
+                <label className="block text-gray-700 text-sm ml-1 mb-1">First Name</label>
+                <input
+                  name="first_name"
+                  value={editUser.first_name}
+                  onChange={handleEditChange}
+                  className="border border-gray-300 p-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                  placeholder="Enter first name"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm mb-1">Last Name </label>
+                <input
+                  name="last_name"
+                  value={editUser.last_name}
+                  onChange={handleEditChange}
+                  className="border border-gray-300 p-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                  placeholder="Enter last name"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm mb-1">Email</label>
+                <input
+                  name="email"
+                  type="email"
+                  value={editUser.email}
+                  onChange={handleEditChange}
+                  className="border border-gray-300 p-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                  placeholder="Enter email"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm mb-1">Gender</label>
+                <input
+                  name="gender"
+                  value={editUser.gender}
+                  onChange={handleEditChange}
+                  className="border border-gray-300 p-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                  placeholder="Enter gender"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm mb-1">Department</label>
+                <input
+                  name="department"
+                  value={editUser.department}
+                  onChange={handleEditChange}
+                  className="border border-gray-300 p-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                  placeholder="Enter department"
+                />
+              </div>
+            </div>
+            {/* action button */}
+            <div className="flex justify-end gap-3 mt-6">
+              <button onClick={() => setIsEditModalOpen(false)} 
+              className="px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 ">
+                Cancel
+              </button>
+
+              <button onClick={handleSaveEdit} 
+              className="px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+                Save Changes
+              </button>
+            </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }
 
 export default Users;
+
+
+
+
