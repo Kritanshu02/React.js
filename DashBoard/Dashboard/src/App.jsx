@@ -116,7 +116,7 @@ const App = () => {
                 ) : (
                   <div className="grid grid-cols-3 gap-x-20 ">
                     {usersData?.map((ele, idx) => (
-                      <Box key={idx} heading={ele.label} data={ele.count} />
+                      <Box key={ele.id} heading={ele.label} data={ele.count} />
                     ))}
                   </div>
                 )}
