@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-function AddUserPage({ addUser }) {
+function AddUserPage({ addUser,departments }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -95,7 +95,7 @@ addUser(newUser)
         </div>
 
         <div>
-          <label className="block mt-5">Department:
+          {/* <label className="block mt-5">Department:
           <input
             type="text" placeholder="Enter your department"
             value={department}
@@ -103,7 +103,22 @@ addUser(newUser)
             className="p-2 ml-2 w-125 border border-gray-300 rounded"
             required
           />
-          </label>
+          </label> */}
+          <label className="block mt-5">Department:
+          <select
+          value={department}
+          onChange={(e) => setDepartment(e.target.value)}
+          className="p-2 ml-2 w-125 border border-gray-300 rounded"
+          required >
+
+          <option value="">Select Department</option>
+          {departments.map((dept, id)=>(
+            <option key={id} value={dept}>
+              {dept}
+            </option>
+          ))}
+        </select>
+        </label>
         </div>
 
         <div>

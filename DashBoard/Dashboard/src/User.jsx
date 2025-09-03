@@ -154,9 +154,10 @@ function Users({ allUsers, departments }) {
                 <td className="p-3">{user.gender}</td>
                 <td className="p-3">{user.department}</td>
         {/* edit/del */}
+        <td>
                 <button
                   onClick={() => handleEditClick(user)}
-                  className="cursor-pointer mt-2.5 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                  className="cursor-pointer mt-2.5 bg-green-500 text-white px-3 py-1 mb-2 rounded hover:bg-green-600"
                 >
                   Edit
                 </button>
@@ -165,6 +166,7 @@ function Users({ allUsers, departments }) {
                 // onClick={()=>console.log("first")}
                 className="cursor-pointer bg-red-500 ml-1 text-white px-3 py-1 rounded hover:bg-red-600">
                   Delete</button>
+                  </td>
               </tr>
             ))}
           </tbody>

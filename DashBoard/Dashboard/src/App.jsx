@@ -124,7 +124,7 @@ const App = () => {
             }
           />
           <Route path="/users" element={<User allUsers={allUsers} departments={departments} />} />
-          <Route path="/add-user" element={<AddUserPage addUser={addUser} />} />
+          <Route path="/add-user" element={<AddUserPage addUser={addUser} departments={departments} />} />
            <Route path="/search-by-birthdate" element={<SearchByBirthdate users={allUsers} />} />
 
         </Routes>
